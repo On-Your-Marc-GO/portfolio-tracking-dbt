@@ -2,9 +2,9 @@
 
 {{
 config(
-unique_key= 'EXCHANGE_HKEY',
-strategy='check',
-check_cols=['EXCHANGE_HDIFF'],
+    unique_key= 'EXCHANGE_HKEY',
+    strategy='check',
+    check_cols=['EXCHANGE_HDIFF'],
 )
 }}
 
