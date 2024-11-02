@@ -45,11 +45,15 @@ with_default_record as(
 
 hashed as (
     SELECT
-        concat_ws('|', COUNTRY_CODE_2_LETTER, COUNTRY_CODE_3_LETTER, COUNTRY_CODE_NUMERIC) as COUNTRY_HKEY
-        , concat_ws('|', COUNTRY_NAME, COUNTRY_CODE_2_LETTER, COUNTRY_CODE_3_LETTER,
-                         COUNTRY_CODE_NUMERIC, ISO_3166_2, REGION,
-                         SUB_REGION, INTERMEDIATE_REGION, REGION_CODE,
-                         SUB_REGION_CODE, INTERMEDIATE_REGION_CODE) as COUNTRY_HDIFF
+        {{ dbt_utils.surrogate_key([
+            'COUNTRY_CODE_2_LETTER', 'COUNTRY_CODE_3_LETTER', 'COUNTRY_CODE_NUMERIC' ]) 
+        }} as COUNTRY_HKEY
+        , {{ dbt_utils.surrogate_key([
+            'COUNTRY_NAME', 'COUNTRY_CODE_2_LETTER', 'COUNTRY_CODE_3_LETTER',
+            'COUNTRY_CODE_NUMERIC', 'ISO_3166_2', 'REGION',
+            'SUB_REGION', 'INTERMEDIATE_REGION', 'REGION_CODE',
+            'SUB_REGION_CODE', 'INTERMEDIATE_REGION_CODE'])
+        }} as COUNTRY_HDIFF
         , * EXCLUDE LOAD_TS
         , LOAD_TS as LOAD_TS_UTC
     FROM with_default_record
